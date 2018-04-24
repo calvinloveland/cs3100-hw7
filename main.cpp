@@ -3,21 +3,27 @@
 #include<algorithm>
 #include<iostream>
 #include<vector>
+#include<fstream>
 
 using namespace std;
 
 int main(){
 	
-	int anomalies=0;
 	const int REFERENCES = 1000;
 	const int FRAMES = 100;
 	const int PAGES = 250;
 	const int SEQUENCES = 100;
+			
+	ofstream resultsFile;
+	resultsFile.open("results.csv");
+
+	int anomalies=0;
 	vector<vector<int>> references(SEQUENCES, vector<int>(REFERENCES));
 	vector<vector<int>> faults(SEQUENCES, vector<int>(FRAMES));
-
-	cout << "Length of memory reference string:" << REFERENCES << endl;
-	cout << "Frames of physical memory:" << FRAMES << endl << endl;
+	
+	cout << "Sequences tested: " << SEQUENCES << endl;
+	cout << "Length of memory reference string: " << REFERENCES << endl;
+	cout << "Frames of physical memory: " << FRAMES << endl << endl;
 	
 	for (int i =0; i < SEQUENCES; i++){
 		for (int j = 0; j < REFERENCES; j++){
@@ -51,7 +57,11 @@ int main(){
 				}
 			}
 			faults[sequence][frameCount] = currentFaultCount;
+			resultsFile << currentFaultCount << ",";
 		}
+		resultsFile << endl;
 	}
 	cout << "Anomaly detected " << anomalies << " times." << endl;
+	resultsFile.close();
+	return 0;
 }
